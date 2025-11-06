@@ -63,16 +63,33 @@ sed -i 's/x21a-skeleton/mi-nueva-app/g' pom.xml
 ```
 
 ### 2. Configurar Base de Datos
+
+**📁 Archivos de configuración:**
+- `src/main/resources/application.properties` - Configuración principal
+- `src/main/webapp/META-INF/context.xml` - Configuración JNDI para Tomcat
+
+**application.properties:**
+```properties
+# JNDI DataSource (recomendado para producción)
+spring.datasource.jndi-name=java:comp/env/jdbc/x21DataSource
+spring.jpa.database-platform=org.hibernate.dialect.Oracle12cDialect
+
+# Configuración directa (para desarrollo local)
+# spring.datasource.url=jdbc:oracle:thin:@localhost:1530:xe
+# spring.datasource.username=xxxxxxxx
+# spring.datasource.password=xxxxxxxx
+```
+
+**META-INF/context.xml:**
 ```xml
-<!-- context.xml -->
 <Context>
-    <Resource name="jdbc/miapp" 
+    <Resource name="jdbc/x21DataSource"
               auth="Container"
               type="javax.sql.DataSource"
               driverClassName="oracle.jdbc.OracleDriver"
-              url="jdbc:oracle:thin:@servidor:1521:sid"
-              username="usuario"
-              password="password"
+              url="jdbc:oracle:thin:@x21d:1530/x21.ejie.eus"
+              username="xxxxxxxx"
+              password="xxxxxxxx"
               maxTotal="20"
               maxIdle="10"
               maxWaitMillis="-1"/>

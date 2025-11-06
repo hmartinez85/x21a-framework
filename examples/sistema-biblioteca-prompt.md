@@ -8,9 +8,9 @@ Copia este prompt completo en tu IA favorita para generar una aplicación de ges
 
 ```
 Genera una aplicación completa siguiendo las especificaciones del repositorio:
-https://github.com/[tu-usuario]/x21a-framework
+https://github.com/hmartinez85/x21a-framework
 
-Quiero que lo generes en la siguiente ruta: C:\Users\xagustin\Entorno_UDA\workspaces\udaTemplatesIA\gestion-libros\amazonq
+Quiero que lo generes en la siguiente ruta: C:\Entorno_UDA\workspaces\udaTemplatesIA\gestion-libros\amazonq
 
 Nombre del proyecto: sistema-biblioteca
 Entidad principal: Libro
@@ -20,24 +20,98 @@ ESPECIFICACIONES TÉCNICAS:
 - Spring Boot 2.7.18
 - Oracle Database con JNDI
 - Thymeleaf + Bootstrap 5
-- Patrón MVC completo
+- Patrón MVC completo (Controller, Service, Repository)
 - Diseño enterprise profesional
 
-FUNCIONALIDADES REQUERIDAS:
-1. CRUD completo de libros
+ARCHIVOS OBLIGATORIOS A GENERAR:
+
+📁 ESTRUCTURA COMPLETA:
+```
+sistema-biblioteca/
+├── src/main/java/com/ejie/biblioteca/
+│   ├── controller/LibroController.java
+│   ├── service/LibroService.java
+│   ├── repository/LibroRepository.java
+│   ├── model/Libro.java (extends BaseEntity)
+│   └── BibliotecaApplication.java
+├── src/main/resources/
+│   ├── templates/libros/list.html
+│   ├── static/css/style.css
+│   ├── static/js/app.js
+│   ├── application.properties
+│   └── data.sql
+├── src/main/webapp/
+│   ├── META-INF/context.xml
+│   └── WEB-INF/web.xml
+├── database/schema.sql
+├── pom.xml
+├── README.md
+├── DEPLOYMENT.md
+└── TOMCAT-SETUP.md
+```
+
+📋 CONFIGURACIONES ESPECÍFICAS:
+
+1. **pom.xml**: Spring Boot 2.7.18, Oracle driver, Thymeleaf, Bootstrap
+2. **application.properties**: JNDI DataSource, Oracle dialect, logging
+3. **context.xml**: JNDI configurado para x21d:1530/x21.ejie.eus
+4. **schema.sql**: Tabla LIBROS con secuencia e índices
+5. **data.sql**: 10+ libros de ejemplo
+
+📊 ENTIDAD LIBRO:
+```java
+@Entity
+@Table(name = "LIBROS")
+public class Libro extends BaseEntity {
+    @Column(name = "TITULO", nullable = false, length = 200)
+    private String titulo;
+    
+    @Column(name = "AUTOR", nullable = false, length = 100)
+    private String autor;
+    
+    @Column(name = "ISBN", unique = true, length = 20)
+    private String isbn;
+    
+    @Column(name = "PRECIO", precision = 10, scale = 2)
+    private BigDecimal precio;
+    
+    @Column(name = "STOCK")
+    private Integer stock;
+    
+    @Column(name = "CATEGORIA", length = 50)
+    private String categoria;
+}
+```
+
+🎨 FUNCIONALIDADES REQUERIDAS:
+1. CRUD completo con validaciones
 2. Búsqueda por título, autor, ISBN
 3. Filtrado por categoría
-4. Paginación de resultados
-5. Validaciones de formulario
-6. Alertas de stock bajo
-7. Estadísticas básicas
+4. Paginación (20 registros por página)
+5. Alertas de stock bajo (< 5 unidades)
+6. Dashboard con estadísticas
+7. Exportar a Excel/PDF
+8. Responsive design completo
+
+🔧 CONFIGURACIÓN ORACLE:
+- Host: x21d:1530/x21.ejie.eus
+- Usuario: xxxxxxxx / Password: xxxxxxxx
+- JNDI: java:comp/env/jdbc/x21DataSource
+- Dialect: Oracle12cDialect
+
+📝 DOCUMENTACIÓN OBLIGATORIA:
+- README.md con instrucciones completas
+- DEPLOYMENT.md para WebLogic/Tomcat
+- TOMCAT-SETUP.md paso a paso
+- Comentarios en código
 
 PROCESO:
 1. Sigue la guía paso a paso del repositorio
 2. Genera prototipo HTML profesional
 3. Itera el diseño con checkpoints de aprobación
-4. Genera código Spring Boot final
+4. Genera código Spring Boot final completo
 5. Valida que coincida exactamente con el prototipo
+6. Incluye TODOS los archivos de configuración
 
 ¿Estás listo para comenzar?
 ```

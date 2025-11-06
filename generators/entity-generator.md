@@ -13,29 +13,52 @@ Genera una entidad JPA para Spring Boot siguiendo el patrón X21A de EJIE con es
 - Jackson para JSON
 - Validaciones Bean Validation
 
-### Estructura Base:
+### Estructura Completa Obligatoria:
+
+**📁 Archivos a generar:**
+```
+src/main/java/com/ejie/[proyecto]/
+├── model/[Entidad].java (extends BaseEntity)
+├── repository/[Entidad]Repository.java
+├── service/[Entidad]Service.java
+├── controller/[Entidad]Controller.java
+└── [Proyecto]Application.java
+
+src/main/resources/
+├── templates/[entidad]/list.html
+├── static/css/style.css
+├── static/js/app.js
+├── application.properties
+└── data.sql
+
+src/main/webapp/
+├── META-INF/context.xml
+└── WEB-INF/web.xml
+
+database/
+└── schema.sql
+
+README.md
+DEPLOYMENT.md
+TOMCAT-SETUP.md
+pom.xml
+```
+
+**🏗️ Entidad Base:**
 ```java
-package com.ejie.x21a.model;
+package com.ejie.[proyecto].model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "NOMBRE_TABLA")
-public class NombreEntidad {
+@Table(name = "[ENTIDAD_PLURAL]")
+public class [Entidad] extends BaseEntity {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_generator")
-    @SequenceGenerator(name = "seq_generator", sequenceName = "SEQ_NOMBRE_TABLA", allocationSize = 1)
-    private Long id;
-    
-    // Campos con validaciones apropiadas
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private Date createdDate;
+    // Campos específicos con validaciones
     
     // Constructor vacío
     // Getters y setters
