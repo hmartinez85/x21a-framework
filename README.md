@@ -31,7 +31,7 @@ Copia este prompt a cualquier IA:
 
 ```
 Genera una aplicación completa siguiendo las especificaciones del repositorio:
-https://github.com/[tu-usuario]/x21a-framework
+https://github.com/hmartinez85/x21a-framework
 
 Quiero que lo generes en la siguiente ruta: C:\tu\ruta\proyecto
 
@@ -44,7 +44,7 @@ Campos: [campo1, campo2, campo3, ...]
 
 ```
 Genera una aplicación completa siguiendo las especificaciones del repositorio:
-https://github.com/[tu-usuario]/x21a-framework
+https://github.com/hmartinez85/x21a-framework
 
 Quiero que lo generes en la siguiente ruta: C:\Users\usuario\workspace\mi-proyecto
 
@@ -88,7 +88,7 @@ Thymeleaf View (Bootstrap 5 + JavaScript)
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/[tu-usuario]/x21a-framework.git
+git clone https://github.com/hmartinez85/x21a-framework.git
 cd x21a-framework
 ```
 
@@ -151,8 +151,8 @@ MIT License - Libre para uso comercial y personal.
 
 ## 📞 Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/[tu-usuario]/x21a-framework/issues)
-- **Documentación**: [Wiki del proyecto](https://github.com/[tu-usuario]/x21a-framework/wiki)
+- **Issues**: [GitHub Issues](https://github.com/hmartinez85/x21a-framework/issues)
+- **Documentación**: [Wiki del proyecto](https://github.com/hmartinez85/x21a-framework/wiki)
 - **Ejemplos**: Carpeta `examples/`
 
 ---
