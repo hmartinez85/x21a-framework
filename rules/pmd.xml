@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<ruleset name="X21A PMD Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 
+         https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>Reglas PMD para el framework X21A de EJIE</description>
+
+    <!-- Reglas de mejores prácticas -->
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="GuardLogStatement"/>
+    </rule>
+
+    <!-- Reglas de diseño de código -->
+    <rule ref="category/java/design.xml">
+        <exclude name="LawOfDemeter"/>
+        <exclude name="LoosePackageCoupling"/>
+        <exclude name="DataClass"/>
+    </rule>
+
+    <!-- Reglas de documentación -->
+    <rule ref="category/java/documentation.xml">
+        <exclude name="CommentRequired"/>
+        <exclude name="CommentSize"/>
+    </rule>
+
+    <!-- Reglas de manejo de errores -->
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="BeanMembersShouldSerialize"/>
+        <exclude name="DataflowAnomalyAnalysis"/>
+        <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <exclude name="AvoidFieldNameMatchingTypeName"/>
+    </rule>
+
+    <!-- Reglas de rendimiento -->
+    <rule ref="category/java/performance.xml">
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    </rule>
+
+    <!-- Reglas de seguridad -->
+    <rule ref="category/java/security.xml"/>
+
+    <!-- Reglas personalizadas para Spring Boot -->
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateField">
+        <properties>
+            <property name="ignoredAnnotations" value="org.springframework.beans.factory.annotation.Autowired|javax.persistence.Id|javax.persistence.Column|javax.persistence.JoinColumn|javax.persistence.OneToMany|javax.persistence.ManyToOne|javax.persistence.OneToOne|javax.persistence.ManyToMany"/>
+        </properties>
+    </rule>
+
+    <!-- Configuración de complejidad ciclomática -->
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <properties>
+            <property name="classReportLevel" value="80"/>
+            <property name="methodReportLevel" value="10"/>
+        </properties>
+    </rule>
+
+    <!-- Configuración de longitud de métodos -->
+    <rule ref="category/java/design.xml/ExcessiveMethodLength">
+        <properties>
+            <property name="minimum" value="100"/>
+        </properties>
+    </rule>
+
+    <!-- Configuración de longitud de clases -->
+    <rule ref="category/java/design.xml/ExcessiveClassLength">
+        <properties>
+            <property name="minimum" value="1000"/>
+        </properties>
+    </rule>
+
+    <!-- Configuración de número de parámetros -->
+    <rule ref="category/java/design.xml/ExcessiveParameterList">
+        <properties>
+            <property name="minimum" value="7"/>
+        </properties>
+    </rule>
+
+    <!-- Reglas específicas para JPA/Hibernate -->
+    <rule name="JPAEntityShouldHaveNoArgConstructor"
+          language="java"
+          message="Las entidades JPA deben tener un constructor sin argumentos"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Las entidades JPA requieren un constructor sin argumentos para la instanciación por parte de Hibernate.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                    //ClassOrInterfaceDeclaration[
+                        .//Annotation/Name[@Image='Entity']
+                        and not(.//ConstructorDeclaration[count(FormalParameters/FormalParameter) = 0])
+                        and .//ConstructorDeclaration
+                    ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Reglas para controladores Spring -->
+    <rule name="ControllerShouldNotHaveBusinessLogic"
+          language="java"
+          message="Los controladores no deben contener lógica de negocio compleja"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Los controladores Spring deben delegar la lógica de negocio a los servicios.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                    //ClassOrInterfaceDeclaration[
+                        .//Annotation/Name[@Image='Controller' or @Image='RestController']
+                    ]//MethodDeclaration[
+                        count(.//Statement) > 10
+                    ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Exclusiones para archivos generados -->
+    <exclude-pattern>.*/target/.*</exclude-pattern>
+    <exclude-pattern>.*/generated/.*</exclude-pattern>
+    <exclude-pattern>.*Test.java</exclude-pattern>
+    <exclude-pattern>.*Application.java</exclude-pattern>
+
+</ruleset>

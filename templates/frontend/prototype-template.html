@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITULO_APLICACION}} - Prototipo X21A</title>
+    
+    <!-- Bootstrap 5.3.0 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6.0.0 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        /* Variables CSS para el tema */
+        :root {
+            --primary-color: {{COLOR_PRIMARIO}};
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --white-color: #ffffff;
+            
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --border-radius: 0.375rem;
+            --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        /* Estilos base */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #004085 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Cards estadísticas */
+        .stats-card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .stats-label {
+            color: var(--secondary-color);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Filtros */
+        .filters-card {
+            border: none;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--border-radius);
+        }
+
+        .search-input {
+            border-radius: var(--border-radius);
+            border: 1px solid #dee2e6;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+        }
+
+        /* Tabla */
+        .data-table {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .table th {
+            background-color: var(--dark-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.5px;
+            padding: 1rem 0.75rem;
+        }
+
+        .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(0, 102, 204, 0.05);
+        }
+
+        /* Botones de acción */
+        .action-buttons {
+            display: flex;
+            gap: 0.25rem;
+            justify-content: center;
+        }
+
+        .action-buttons .btn {
+            padding: 0.375rem 0.5rem;
+            font-size: 0.875rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .action-buttons .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Estados */
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Paginación */
+        .pagination .page-link {
+            border-radius: var(--border-radius);
+            margin: 0 0.125rem;
+            border: 1px solid #dee2e6;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .pagination .page-link:hover {
+            background-color: rgba(0, 102, 204, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        /* Modal */
+        .modal-content {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #004085 100%);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            border: 1px solid #dee2e6;
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+        }
+
+        /* Animaciones */
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-card {
+                margin-bottom: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.125rem;
+            }
+            
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+            
+            .modal-dialog {
+                margin: 0.5rem;
+            }
+        }
+
+        /* Tema específico del dominio */
+        {{ESTILOS_PERSONALIZADOS}}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="{{ICONO_PRINCIPAL}} me-3 fs-3"></i>
+                    <h1 class="app-title">{{TITULO_APLICACION}}</h1>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="#" class="text-white-50">Inicio</a></li>
+                        <li class="breadcrumb-item active text-white">{{SECCION_ACTUAL}}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container-fluid py-4">
+        <!-- Título y botón principal -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h3 mb-0">
+                <i class="{{ICONO_SECCION}} me-2"></i>
+                {{TITULO_SECCION}}
+            </h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mainModal">
+                <i class="fas fa-plus-circle me-2"></i>
+                Nuevo {{ENTIDAD_SINGULAR}}
+            </button>
+        </div>
+
+        <!-- Cards de estadísticas -->
+        <div class="row mb-4">
+            {{CARDS_ESTADISTICAS}}
+        </div>
+
+        <!-- Filtros -->
+        <div class="card filters-card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control search-input" id="searchInput" 
+                                   placeholder="Buscar {{ENTIDAD_PLURAL}}...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="statusFilter">
+                            <option value="">Todos los estados</option>
+                            <option value="active">Activos</option>
+                            <option value="inactive">Inactivos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-secondary me-2" onclick="clearFilters()">
+                            <i class="fas fa-times me-1"></i>
+                            Limpiar
+                        </button>
+                        <button type="button" class="btn btn-outline-success">
+                            <i class="fas fa-download me-1"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de datos -->
+        <div class="data-table">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" class="form-check-input" id="selectAll">
+                            </th>
+                            {{COLUMNAS_TABLA}}
+                            <th style="width: 120px; text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody">
+                        {{FILAS_DATOS}}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="d-flex justify-content-between align-items-center p-3 border-top">
+                <div class="text-muted">
+                    Mostrando <span id="currentCount">10</span> de <span id="totalCount">156</span> registros
+                </div>
+                <nav aria-label="Paginación">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="changePage(-1)">Anterior</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="changePage(1)">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="changePage(1)">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="changePage(1)">Siguiente</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal principal -->
+    <div class="modal fade" id="mainModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Nuevo {{ENTIDAD_SINGULAR}}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    {{FORMULARIO_MODAL}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="saveRecord()">
+                        <i class="fas fa-save me-1"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Variables globales
+        let currentPage = 1;
+        let isEditing = false;
+        let editingId = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animaciones de entrada
+            const cards = document.querySelectorAll('.stats-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate-slide-up');
+            });
+
+            // Event listeners
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Checkbox seleccionar todo
+            document.getElementById('selectAll').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            });
+
+            // Búsqueda en tiempo real
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performSearch(this.value);
+                }, 300);
+            });
+
+            // Filtro por estado
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                applyStatusFilter(this.value);
+            });
+
+            // Reset modal al cerrar
+            document.getElementById('mainModal').addEventListener('hidden.bs.modal', function() {
+                resetModal();
+            });
+        }
+
+        // Funciones de interacción
+        function editRecord(id) {
+            isEditing = true;
+            editingId = id;
+            
+            // Simular carga de datos
+            Swal.fire({
+                title: 'Cargando...',
+                text: 'Obteniendo datos del registro',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                Swal.close();
+                document.querySelector('#mainModal .modal-title').innerHTML = 
+                    '<i class="fas fa-edit me-2"></i>Editar {{ENTIDAD_SINGULAR}}';
+                
+                // Aquí cargarías los datos reales
+                populateFormWithData(id);
+                
+                new bootstrap.Modal(document.getElementById('mainModal')).show();
+            }, 1000);
+        }
+
+        function deleteRecord(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Simular eliminación
+                    Swal.fire({
+                        title: 'Eliminando...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    setTimeout(() => {
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El registro ha sido eliminado correctamente.',
+                            'success'
+                        );
+                        // Aquí actualizarías la tabla
+                        removeRowFromTable(id);
+                    }, 1500);
+                }
+            });
+        }
+
+        function saveRecord() {
+            // Validaciones básicas
+            if (!validateForm()) {
+                return;
+            }
+
+            const action = isEditing ? 'Actualizando' : 'Guardando';
+            
+            Swal.fire({
+                title: `${action}...`,
+                text: 'Procesando información',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                Swal.fire({
+                    title: '¡Guardado!',
+                    text: 'Los datos han sido guardados correctamente.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                bootstrap.Modal.getInstance(document.getElementById('mainModal')).hide();
+                
+                // Aquí actualizarías la tabla con los nuevos datos
+                if (!isEditing) {
+                    addRowToTable();
+                } else {
+                    updateRowInTable(editingId);
+                }
+            }, 1500);
+        }
+
+        function performSearch(term) {
+            console.log('Buscando:', term);
+            // Aquí implementarías la búsqueda real
+            showSearchResults(term);
+        }
+
+        function applyStatusFilter(status) {
+            console.log('Filtro aplicado:', status);
+            // Aquí implementarías el filtrado real
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            // Recargar datos originales
+            loadOriginalData();
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            console.log('Cambiar a página:', currentPage);
+            // Aquí implementarías la paginación real
+        }
+
+        // Funciones auxiliares
+        function validateForm() {
+            // Implementar validaciones específicas del formulario
+            return true;
+        }
+
+        function resetModal() {
+            isEditing = false;
+            editingId = null;
+            document.querySelector('#mainModal .modal-title').innerHTML = 
+                '<i class="fas fa-plus-circle me-2"></i>Nuevo {{ENTIDAD_SINGULAR}}';
+            
+            // Limpiar formulario
+            document.querySelectorAll('#mainModal input, #mainModal select, #mainModal textarea')
+                .forEach(field => field.value = '');
+        }
+
+        function populateFormWithData(id) {
+            // Simular datos de ejemplo
+            console.log('Cargando datos para ID:', id);
+        }
+
+        function removeRowFromTable(id) {
+            // Remover fila de la tabla
+            console.log('Removiendo fila:', id);
+        }
+
+        function addRowToTable() {
+            // Agregar nueva fila a la tabla
+            console.log('Agregando nueva fila');
+        }
+
+        function updateRowInTable(id) {
+            // Actualizar fila existente
+            console.log('Actualizando fila:', id);
+        }
+
+        function showSearchResults(term) {
+            // Mostrar resultados de búsqueda
+            console.log('Mostrando resultados para:', term);
+        }
+
+        function loadOriginalData() {
+            // Cargar datos originales
+            console.log('Cargando datos originales');
+        }
+
+        // Funciones específicas del dominio
+        {{FUNCIONES_PERSONALIZADAS}}
+    </script>
+</body>
+</html>

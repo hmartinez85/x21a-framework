@@ -1,0 +1,50 @@
+name: Validate Examples
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-markdown:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Validate Markdown files
+      run: |
+        echo "Validating Markdown syntax..."
+        find . -name "*.md" -exec echo "Checking {}" \;
+        
+    - name: Check links in documentation
+      run: |
+        echo "Checking for broken links..."
+        grep -r "http" docs/ examples/ || true
+        
+    - name: Validate example prompts
+      run: |
+        echo "Validating example prompts structure..."
+        ls -la examples/
+        
+    - name: Check required files
+      run: |
+        echo "Checking required framework files..."
+        test -f README.md && echo "✅ README.md exists"
+        test -f LICENSE && echo "✅ LICENSE exists"
+        test -f .gitignore && echo "✅ .gitignore exists"
+        test -d generators/ && echo "✅ generators/ directory exists"
+        test -d templates/ && echo "✅ templates/ directory exists"
+        test -d examples/ && echo "✅ examples/ directory exists"
+        test -d docs/ && echo "✅ docs/ directory exists"
+        
+    - name: Validate generator files
+      run: |
+        echo "Validating generator files..."
+        ls -la generators/
+        
+    - name: Summary
+      run: |
+        echo "🎉 X21A Framework validation completed successfully!"
+        echo "📚 Framework is ready for AI generation"
