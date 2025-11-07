@@ -5,7 +5,7 @@
 -->
 <Context>
     <!-- DataSource JNDI para Oracle -->
-    <Resource name="jdbc/x21DataSource"
+    <Resource name="jdbc/x21d"
               auth="Container"
               type="javax.sql.DataSource"
               maxTotal="20"

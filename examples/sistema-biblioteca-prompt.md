@@ -96,7 +96,7 @@ public class Libro extends BaseEntity {
 🔧 CONFIGURACIÓN ORACLE:
 - Host: x21d:1530/x21.ejie.eus
 - Usuario: xxxxxxxx / Password: xxxxxxxx
-- JNDI: java:comp/env/jdbc/x21DataSource
+- JNDI: java:comp/env/jdbc/x21d
 - Dialect: Oracle12cDialect
 
 📝 DOCUMENTACIÓN OBLIGATORIA:
