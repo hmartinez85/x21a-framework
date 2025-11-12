@@ -19,6 +19,7 @@ Debes generar TODOS estos archivos:
 [proyecto]/
 ├── src/main/java/com/ejie/[proyecto]/
 │   ├── controller/[Entidad]Controller.java
+│   ├── controller/HomeController.java
 │   ├── service/[Entidad]Service.java
 │   ├── repository/[Entidad]Repository.java
 │   ├── model/[Entidad].java (extends BaseEntity)
@@ -52,6 +53,11 @@ Debes generar TODOS estos archivos:
 
 **PREGUNTA 2**: ¿Cuál es tu JNDI de conexión?
 - Ejemplo: `jdbc/miConexion` (personalizar según proyecto)
+
+**IMPORTANTE para desarrollo local**:
+- JNDI debe usar prefijo completo: `java:comp/env/jdbc/[nombre]`
+- URL Oracle con doble barra: `@//servidor:puerto/servicio`
+- Incluir configuración fallback para desarrollo sin JNDI
 
 ### ⚙️ CONFIGURACIONES ESPECÍFICAS
 
@@ -90,7 +96,13 @@ Debes generar TODOS estos archivos:
 **2. application.properties**:
 ```properties
 # JNDI DataSource (personalizar según proyecto)
-spring.datasource.jndi-name=jdbc/[TU_CONEXION]
+spring.datasource.jndi-name=java:comp/env/jdbc/[TU_CONEXION]
+
+# Fallback datasource configuration (para desarrollo local)
+spring.datasource.url=jdbc:oracle:thin:@//x21d:1530/x21.ejie.eus
+spring.datasource.username=xxxxxxxx
+spring.datasource.password=xxxxxxxx
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 
 # Oracle Database
 spring.jpa.database-platform=org.hibernate.dialect.Oracle12cDialect
@@ -114,12 +126,13 @@ logging.level.com.ejie.[proyecto]=INFO
     <Resource name="jdbc/[TU_CONEXION]"
               auth="Container"
               type="javax.sql.DataSource"
+              driverClassName="oracle.jdbc.OracleDriver"
+              url="jdbc:oracle:thin:@//x21d:1530/x21.ejie.eus"
               username="xxxxxxxx"
               password="xxxxxxxx"
-              driverClassName="oracle.jdbc.OracleDriver"
-              url="jdbc:oracle:thin:@x21d:1530/x21.ejie.eus"
-              maxTotal="20"
-              maxIdle="5"
+              maxTotal="100"
+              maxIdle="20"
+              minIdle="5"
               maxWaitMillis="10000"/>
 </Context>
 ```
@@ -303,21 +316,46 @@ CREATE INDEX IDX_[ENTIDAD]_CREATED ON [ENTIDAD_PLURAL](CREATED_DATE);
 - ✅ Logging configurado
 - ✅ Datos de ejemplo
 
+### 🔌 CONTROLADORES OBLIGATORIOS
+
+**1. HomeController.java**:
+```java
+@Controller
+public class HomeController {
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/[entidad]";
+    }
+}
+```
+
+**2. [Entidad]Controller.java**:
+- Mapeo principal: `@RequestMapping("/[entidad]")`
+- Vista principal: `@GetMapping` -> `return "[entidad]/index";`
+- API REST: `/api/*` endpoints
+
 ### 🎯 ENDPOINTS OBLIGATORIOS
 
-- `GET /[entidad]/list` - Vista principal
-- `POST /[entidad]/save` - Crear/actualizar
-- `DELETE /[entidad]/delete/{id}` - Eliminar
-- `GET /[entidad]/search` - Búsqueda
+- `GET /` - Redirección a entidad principal
+- `GET /[entidad]` - Vista principal
+- `GET /[entidad]/api/list` - Listar vía API
+- `POST /[entidad]/api` - Crear vía API
+- `PUT /[entidad]/api/{id}` - Actualizar vía API
+- `DELETE /[entidad]/api/{id}` - Eliminar vía API
 
 ### 🔧 VALIDACIÓN POST-GENERACIÓN
 
 Verifica que se generaron TODOS los archivos:
 - [ ] Estructura Java completa (Controller, Service, Repository, Model)
+- [ ] HomeController para redirección raíz
 - [ ] Configuraciones (pom.xml, application.properties, context.xml, web.xml)
 - [ ] Frontend (HTML, CSS, JS)
 - [ ] Base de datos (schema.sql, data.sql)
 - [ ] Documentación (README, DEPLOYMENT, TOMCAT-SETUP)
+
+**IMPORTANTE**: Verificar navegación:
+- [ ] `http://localhost:8081/[proyecto]/` redirige correctamente
+- [ ] `http://localhost:8081/[proyecto]/[entidad]` muestra la vista principal
 
 ¿Estás listo para generar la aplicación completa?
 ```
