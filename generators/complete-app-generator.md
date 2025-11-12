@@ -40,6 +40,19 @@ Debes generar TODOS estos archivos:
 └── TOMCAT-SETUP.md
 ```
 
+### ❓ PREFERENCIAS DE BASE DE DATOS
+
+**PREGUNTA 1**: ¿Prefieres usar triggers de base de datos o JPA para auditoría?
+- **OPCIÓN A**: Triggers de BD (tradicional)
+  - Auto-incremento: Trigger + Secuencia
+  - Auditoría: Triggers para fechas
+- **OPCIÓN B**: JPA puro (recomendado)
+  - Auto-incremento: `@GeneratedValue` + Secuencia
+  - Auditoría: `@PrePersist` y `@PreUpdate`
+
+**PREGUNTA 2**: ¿Cuál es tu JNDI de conexión?
+- Ejemplo: `jdbc/miConexion` (personalizar según proyecto)
+
 ### ⚙️ CONFIGURACIONES ESPECÍFICAS
 
 **1. pom.xml** - Spring Boot 2.7.18:
@@ -76,8 +89,8 @@ Debes generar TODOS estos archivos:
 
 **2. application.properties**:
 ```properties
-# JNDI DataSource
-spring.datasource.jndi-name=java:comp/env/jdbc/x21DataSource
+# JNDI DataSource (personalizar según proyecto)
+spring.datasource.jndi-name=jdbc/[TU_CONEXION]
 
 # Oracle Database
 spring.jpa.database-platform=org.hibernate.dialect.Oracle12cDialect
@@ -98,7 +111,7 @@ logging.level.com.ejie.[proyecto]=INFO
 **3. context.xml**:
 ```xml
 <Context>
-    <Resource name="jdbc/x21DataSource"
+    <Resource name="jdbc/[TU_CONEXION]"
               auth="Container"
               type="javax.sql.DataSource"
               username="xxxxxxxx"
@@ -127,7 +140,7 @@ logging.level.com.ejie.[proyecto]=INFO
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <resource-ref>
-        <res-ref-name>jdbc/x21DataSource</res-ref-name>
+        <res-ref-name>jdbc/[TU_CONEXION]</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
@@ -136,17 +149,70 @@ logging.level.com.ejie.[proyecto]=INFO
 
 ### 📊 ENTIDAD BASE
 
+**OPCIÓN A - Con Triggers (ID manual)**:
 ```java
 @Entity
 @Table(name = "[ENTIDAD_PLURAL]")
 public class [Entidad] extends BaseEntity {
     
+    @Id
+    @Column(name = "id")
+    private Long id; // Manejado por trigger
+    
     // Campos específicos con validaciones JPA
     // Usar @NotBlank, @Size, @Pattern según corresponda
+    
+    @Column(name = "created_date", updatable = false)
+    private Date createdDate; // Manejado por trigger
+    
+    @Column(name = "updated_date")
+    private Date updatedDate; // Manejado por trigger
     
     // Constructor vacío obligatorio
     public [Entidad]() {
         super();
+    }
+    
+    // Getters y setters
+    // toString, equals, hashCode
+}
+```
+
+**OPCIÓN B - Solo JPA (Recomendado)**:
+```java
+@Entity
+@Table(name = "[ENTIDAD_PLURAL]")
+public class [Entidad] extends BaseEntity {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "[entidad]_seq")
+    @SequenceGenerator(name = "[entidad]_seq", sequenceName = "[ENTIDAD]_SEQ", allocationSize = 1)
+    private Long id;
+    
+    // Campos específicos con validaciones JPA
+    // Usar @NotBlank, @Size, @Pattern según corresponda
+    
+    @Column(name = "created_date", updatable = false)
+    private LocalDateTime createdDate;
+    
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+    
+    // Constructor vacío obligatorio
+    public [Entidad]() {
+        super();
+    }
+    
+    // Métodos de auditoría JPA
+    @PrePersist
+    protected void onCreate() {
+        createdDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedDate = LocalDateTime.now();
     }
     
     // Getters y setters
@@ -167,7 +233,7 @@ public class [Entidad] extends BaseEntity {
 
 ### 🗄️ BASE DE DATOS ORACLE
 
-**schema.sql**:
+**OPCIÓN A - Con Triggers (Tradicional)**:
 ```sql
 -- Crear tabla
 CREATE TABLE [ENTIDAD_PLURAL] (
@@ -182,7 +248,7 @@ CREATE TABLE [ENTIDAD_PLURAL] (
 -- Crear secuencia
 CREATE SEQUENCE [ENTIDAD]_SEQ START WITH 1 INCREMENT BY 1;
 
--- Crear trigger
+-- Trigger para auto-incremento
 CREATE OR REPLACE TRIGGER TRG_[ENTIDAD]_ID
     BEFORE INSERT ON [ENTIDAD_PLURAL]
     FOR EACH ROW
@@ -192,7 +258,32 @@ BEGIN
     END IF;
 END;
 
--- Insertar datos de ejemplo (mínimo 10 registros)
+-- Trigger para auditoría
+CREATE OR REPLACE TRIGGER TRG_[ENTIDAD]_AUDIT
+    BEFORE UPDATE ON [ENTIDAD_PLURAL]
+    FOR EACH ROW
+BEGIN
+    :NEW.UPDATED_DATE := SYSDATE;
+END;
+```
+
+**OPCIÓN B - Solo JPA (Recomendado)**:
+```sql
+-- Crear tabla
+CREATE TABLE [ENTIDAD_PLURAL] (
+    ID NUMBER(19) NOT NULL,
+    -- Campos específicos
+    CREATED_DATE DATE DEFAULT SYSDATE,
+    UPDATED_DATE DATE,
+    VERSION NUMBER(10) DEFAULT 0,
+    CONSTRAINT PK_[ENTIDAD_PLURAL] PRIMARY KEY (ID)
+);
+
+-- Crear secuencia (SIN TRIGGERS)
+CREATE SEQUENCE [ENTIDAD]_SEQ START WITH 1 INCREMENT BY 1;
+
+-- Crear índices para optimización
+CREATE INDEX IDX_[ENTIDAD]_CREATED ON [ENTIDAD_PLURAL](CREATED_DATE);
 ```
 
 ### 📚 DOCUMENTACIÓN OBLIGATORIA
