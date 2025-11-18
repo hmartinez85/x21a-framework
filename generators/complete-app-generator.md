@@ -13,10 +13,18 @@ GENERA UNA APLICACIÓN SPRING BOOT COMPLETA con estas especificaciones:
 
 ### 🏗️ ESTRUCTURA COMPLETA OBLIGATORIA
 
+**PASO 0 - OBLIGATORIO**: Crear Design System
+Antes de generar código, DEBES crear un Design System usando:
+https://github.com/hmartinez85/x21a-framework/blob/main/generators/design-system-prompt.md
+
 Debes generar TODOS estos archivos:
 
 ```
 [proyecto]/
+├── design-system/
+│   ├── design-system.css
+│   ├── design-tokens.json
+│   └── component-library.html
 ├── src/main/java/com/ejie/[proyecto]/
 │   ├── controller/[Entidad]Controller.java
 │   ├── controller/HomeController.java
@@ -41,7 +49,7 @@ Debes generar TODOS estos archivos:
 └── TOMCAT-SETUP.md
 ```
 
-### ❓ PREFERENCIAS DE BASE DE DATOS
+### ❓ PREFERENCIAS DE CONFIGURACIÓN
 
 **PREGUNTA 1**: ¿Prefieres usar triggers de base de datos o JPA para auditoría?
 - **OPCIÓN A**: Triggers de BD (tradicional)
@@ -53,6 +61,20 @@ Debes generar TODOS estos archivos:
 
 **PREGUNTA 2**: ¿Cuál es tu JNDI de conexión?
 - Ejemplo: `jdbc/miConexion` (personalizar según proyecto)
+
+**PREGUNTA 3**: ¿Qué tecnología frontend prefieres?
+- **OPCIÓN A**: Thymeleaf + Bootstrap (tradicional)
+  - Server-side rendering
+  - SEO optimizado
+  - Menos JavaScript
+- **OPCIÓN B**: React + API REST
+  - SPA moderna
+  - Mejor UX interactiva
+  - Más JavaScript
+- **OPCIÓN C**: Vue.js + API REST
+  - Framework progresivo
+  - Curva de aprendizaje suave
+  - Componentes reutilizables
 
 **IMPORTANTE para desarrollo local**:
 - JNDI debe usar prefijo completo: `java:comp/env/jdbc/[nombre]`
@@ -235,14 +257,37 @@ public class [Entidad] extends BaseEntity {
 
 ### 🎨 FRONTEND PROFESIONAL
 
-**Bootstrap 5 + Thymeleaf**:
-- Cards con estadísticas
+**OPCIÓN A - Thymeleaf + Bootstrap 5**:
+- Server-side rendering con Thymeleaf
+- Bootstrap 5.3.0 + Font Awesome 6.4.0
+- Cards con estadísticas dinámicas
 - Tabla responsive con paginación
 - Modales para CRUD
-- Búsqueda en tiempo real
-- Alertas SweetAlert2
-- Animaciones CSS
-- Diseño enterprise profesional
+- JavaScript AJAX para interactividad
+
+**OPCIÓN B - React + API REST**:
+- Create React App o Vite
+- Material-UI o Ant Design
+- Componentes funcionales con Hooks
+- Estado global con Redux/Zustand
+- Routing con React Router
+- Axios para API calls
+
+**OPCIÓN C - Vue.js + API REST**:
+- Vue 3 con Composition API
+- Vuetify o Quasar Framework
+- Vue Router para navegación
+- Pinia para estado global
+- Axios para HTTP requests
+- TypeScript opcional
+
+**OBLIGATORIO para todas las opciones**:
+- Usar el Design System creado en PASO 0
+- Responsive design mobile-first
+- Animaciones y transiciones suaves
+- Validaciones client-side
+- Manejo de errores UX
+- Loading states profesionales
 
 ### 🗄️ BASE DE DATOS ORACLE
 
@@ -346,16 +391,19 @@ public class HomeController {
 ### 🔧 VALIDACIÓN POST-GENERACIÓN
 
 Verifica que se generaron TODOS los archivos:
+- [ ] **Design System completo** (design-system.css, tokens, components)
 - [ ] Estructura Java completa (Controller, Service, Repository, Model)
 - [ ] HomeController para redirección raíz
 - [ ] Configuraciones (pom.xml, application.properties, context.xml, web.xml)
-- [ ] Frontend (HTML, CSS, JS)
+- [ ] Frontend según tecnología elegida (Thymeleaf/React/Vue)
 - [ ] Base de datos (schema.sql, data.sql)
 - [ ] Documentación (README, DEPLOYMENT, TOMCAT-SETUP)
 
 **IMPORTANTE**: Verificar navegación:
 - [ ] `http://localhost:8081/[proyecto]/` redirige correctamente
 - [ ] `http://localhost:8081/[proyecto]/[entidad]` muestra la vista principal
+- [ ] **Design System aplicado consistentemente** en toda la UI
+- [ ] **Responsive design** funciona en móvil y desktop
 
 ¿Estás listo para generar la aplicación completa?
 
