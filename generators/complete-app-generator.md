@@ -358,6 +358,9 @@ Verifica que se generaron TODOS los archivos:
 - [ ] `http://localhost:8081/[proyecto]/[entidad]` muestra la vista principal
 
 ¿Estás listo para generar la aplicación completa?
+
+**IMPORTANTE**: Después de generar, usa el prompt de validación:
+https://github.com/hmartinez85/x21a-framework/blob/main/generators/validation-delivery-prompt.md
 ```
 
 ## 📋 Checklist de Validación
