@@ -20,25 +20,39 @@ COLOR_SECUNDARIO: [Ej: #64748b - Gris corporativo]
 
 ### 🔄 PROCESO AUTOMÁTICO
 
-**CHECKPOINT PREVIO: SELECCIÓN DE TECNOLOGÍA FRONTEND**
+**🔴 CHECKPOINT PREVIO: VALIDACIÓN TÉCNICA COMPLETA**
 
-**SI FRONTEND_TECH NO ESTÁ DEFINIDO:**
-1. Presenta las 4 opciones disponibles:
+**PREGUNTAS TÉCNICAS OBLIGATORIAS - RESPONDER TODAS ANTES DE CONTINUAR:**
+
+1. **TECNOLOGÍA FRONTEND:**
    - **OPCIÓN 1: REACT + MATERIAL-UI** - Moderno, componentes Google Material Design
    - **OPCIÓN 2: ANGULAR + ANGULAR MATERIAL** - Enterprise, TypeScript, Material Design
    - **OPCIÓN 3: REACT + ATLASSIAN DESIGN SYSTEM** - Empresarial, componentes Atlassian
    - **OPCIÓN 4: THYMELEAF + BOOTSTRAP** - Tradicional, server-side rendering
+   
+   **❓ ¿Qué tecnología frontend prefieres?**
 
-2. Pregunta al usuario: "¿Qué tecnología frontend prefieres para tu proyecto [DOMINIO_NEGOCIO]?"
+2. **TIPO DE DESPLIEGUE:**
+   - **JAR STANDALONE** - Servidor embebido (java -jar)
+   - **WAR PARA TOMCAT** - Despliegue en servidor externo
+   
+   **❓ ¿Qué tipo de despliegue necesitas?**
 
-3. Espera la respuesta del usuario
+3. **VERSIÓN SPRING BOOT:**
+   - **2.7.18** - LTS, compatible con Java 8/11
+   - **3.x** - Más reciente, requiere Java 17+
+   
+   **❓ ¿Mantener Spring Boot 2.7.18 o actualizar?**
 
-4. Actualiza FRONTEND_TECH con la opción seleccionada
+4. **DESIGN SYSTEM:**
+   **❓ ¿Tienes preferencias específicas de design system o colores corporativos?**
 
-5. Continúa con PASO 0
+**🚨 REGLA CRÍTICA: SI EL USUARIO YA ESPECIFICÓ TECNOLOGÍAS EN SU SOLICITUD:**
+- **NUNCA cambiar sin consultar**
+- **SIEMPRE respetar las especificaciones del usuario**
+- **SOLO sugerir alternativas si hay incompatibilidades técnicas**
 
-**SI FRONTEND_TECH YA ESTÁ DEFINIDO:**
-- Continúa directamente con PASO 0
+**CONTINUAR SOLO DESPUÉS DE OBTENER TODAS LAS RESPUESTAS**
 
 **PASO 0: DESIGN SYSTEM**
 1. Toma los datos del proyecto de arriba
@@ -69,22 +83,40 @@ COLOR_SECUNDARIO: [Ej: #64748b - Gris corporativo]
    - CHECKPOINT 2: ¿Tiene nivel enterprise profesional?
 
 **PASO 3: BACKEND COMPLETO**
-1. Genera entidad JPA con validaciones y enums
-2. Genera Repository con consultas personalizadas
-3. Genera Service con lógica de negocio
-4. Genera Controller REST con endpoints CRUD
-5. Genera application.properties con JNDI Oracle
-6. Genera context.xml para Tomcat
+1. **CHECKPOINT 0.5**: Verificar estructura BBDD
+   - Mostrar DDL de tablas a crear
+   - **❓ ¿Confirmas que las tablas están creadas en BBDD?**
+   - **NO CONTINUAR hasta recibir confirmación**
+
+2. Genera entidad JPA con validaciones y enums
+3. Genera Repository con consultas personalizadas
+4. Genera Service con lógica de negocio
+   - **🔴 VALIDAR: Métodos no retornen null**
+   - **🔴 VALIDAR: Cálculos matemáticos correctos**
+5. Genera Controller REST/MVC según tecnología frontend
+6. Genera application.properties según tipo despliegue
+7. Genera context.xml solo si es WAR para Tomcat
 
 **PASO 4: FRONTEND FINAL**
-1. Genera vista Thymeleaf basada en prototipo final
-2. Genera JavaScript con AJAX funcional
-3. CHECKPOINT 3: ¿Vista Thymeleaf es idéntica al prototipo?
+1. **SEGÚN TECNOLOGÍA SELECCIONADA:**
+   - **Si REACT**: Componentes React + Design System elegido
+   - **Si ANGULAR**: Componentes Angular + Material
+   - **Si THYMELEAF**: Vistas Thymeleaf + Bootstrap
+
+2. **🔴 REGLA CRÍTICA**: Respetar EXACTAMENTE la tecnología especificada
+3. Genera funcionalidad completa según framework
+4. **CHECKPOINT 3**: ¿Vista frontend es idéntica al prototipo?
+5. **CHECKPOINT 4**: ¿Funcionalidad completa operativa?
 
 **PASO 5: VALIDACIÓN FINAL**
-1. Compara prototipos generados
-2. Verifica consistencia
-3. CHECKPOINT 4: ¿Funcionalidad AJAX completa?
+1. **CHECKPOINT 5**: Validación lógica de negocio
+   - Probar métodos de cálculo
+   - Verificar que no hay valores null inesperados
+   - Validar relaciones entre entidades
+
+2. Compara prototipos generados
+3. Verifica consistencia tecnológica
+4. **CONFIRMACIÓN FINAL**: ¿Todo funciona según especificaciones?
 
 ### ⚙️ CONFIGURACIÓN TÉCNICA FIJA
 
@@ -138,14 +170,18 @@ spring.boot.version=2.7.18
         └── lista.html
 ```
 
-### ✅ CHECKPOINTS OBLIGATORIOS
+### ✅ CHECKPOINTS OBLIGATORIOS - NO CONTINUAR SIN CONFIRMACIÓN
 
-- **CHECKPOINT PREVIO**: ¿Tecnología frontend seleccionada?
+**🔴 CRÍTICO: CADA CHECKPOINT REQUIERE CONFIRMACIÓN EXPLÍCITA DEL USUARIO**
+
+- **CHECKPOINT PREVIO**: ¿Tecnología frontend seleccionada y confirmada?
 - **CHECKPOINT 0**: ¿Design System completo y personalizado?
+- **CHECKPOINT 0.5**: ¿Estructura BBDD creada y verificada?
 - **CHECKPOINT 1**: ¿Prototipo v2 mejora significativamente el v1?
 - **CHECKPOINT 2**: ¿Prototipo final tiene nivel enterprise profesional?
-- **CHECKPOINT 3**: ¿Vista Thymeleaf es visualmente idéntica al prototipo final?
-- **CHECKPOINT 4**: ¿Toda la funcionalidad AJAX funciona correctamente?
+- **CHECKPOINT 3**: ¿Vista frontend es visualmente idéntica al prototipo final?
+- **CHECKPOINT 4**: ¿Toda la funcionalidad funciona correctamente?
+- **CHECKPOINT 5**: ¿Lógica de negocio validada sin errores null?
 
 ### 🎯 RESULTADO FINAL ESPERADO
 
@@ -157,6 +193,8 @@ Al completar la ejecución debes haber generado:
 5. ✅ Frontend Thymeleaf profesional
 6. ✅ JavaScript con AJAX operativo
 7. ✅ Todos los checkpoints validados
+8. ✅ Lógica de negocio sin errores null
+9. ✅ Tecnologías respetadas según especificaciones usuario
 
 ---
 
@@ -168,11 +206,51 @@ Al completar la ejecución debes haber generado:
 
 **La IA debe:**
 1. Leer los datos del proyecto
-2. **VERIFICAR si FRONTEND_TECH está definido**
-   - Si NO: Ejecutar CHECKPOINT PREVIO (preguntar tecnología)
-   - Si SÍ: Continuar directamente
-3. Ejecutar cada paso automáticamente
-4. Generar todos los archivos
-5. Validar cada checkpoint
-6. Reportar el progreso paso a paso
-7. Confirmar la finalización exitosa
+2. **EJECUTAR CHECKPOINT PREVIO OBLIGATORIO** (preguntas técnicas)
+3. **RESPETAR ESPECIFICACIONES DEL USUARIO** (nunca cambiar sin consultar)
+4. Ejecutar cada paso automáticamente
+5. **PARAR EN CADA CHECKPOINT** hasta recibir confirmación
+6. Generar todos los archivos
+7. **VALIDAR LÓGICA DE NEGOCIO** (no null, cálculos correctos)
+8. Reportar el progreso paso a paso
+9. Confirmar la finalización exitosa
+
+---
+
+## 🚨 REGLAS CRÍTICAS - CUMPLIMIENTO OBLIGATORIO
+
+### 🔴 RESPETO A ESPECIFICACIONES DEL USUARIO
+- **SI EL USUARIO ESPECIFICA REACT**: Usar REACT, no Thymeleaf
+- **SI EL USUARIO ESPECIFICA ATLASSIAN**: Usar Atlassian Design System
+- **SI EL USUARIO ESPECIFICA WAR**: Configurar para WAR, no JAR
+- **NUNCA cambiar tecnologías sin consultar explícitamente**
+
+### 🔴 SISTEMA DE CHECKPOINTS
+- **CADA CHECKPOINT requiere confirmación del usuario**
+- **NO CONTINUAR** hasta recibir "SÍ" o "CONTINÚA"
+- **MOSTRAR CLARAMENTE** qué se va a hacer en el siguiente paso
+
+### 🔴 VALIDACIÓN DE CÓDIGO
+- **PROBAR métodos de cálculo** antes de finalizar
+- **VERIFICAR que no hay valores null** inesperados
+- **VALIDAR relaciones JPA** funcionan correctamente
+- **COMPROBAR configuración** según tipo de despliegue
+
+### 🔴 ESTRUCTURA DE ARCHIVOS
+- **GENERAR TODOS los archivos** de la estructura esperada
+- **USAR NOMBRES CONSISTENTES** con [NOMBRE_PROYECTO]
+- **CREAR DIRECTORIOS** necesarios automáticamente
+
+### 🔴 REPORTE DE PROGRESO
+- **INFORMAR** antes de cada paso qué se va a hacer
+- **CONFIRMAR** después de cada paso qué se completó
+- **LISTAR** archivos generados con rutas completas
+- **SOLICITAR CONFIRMACIÓN** en cada checkpoint
+
+**❌ ERRORES COMUNES A EVITAR:**
+- Cambiar React por Thymeleaf sin consultar
+- Generar código con métodos que retornan null
+- No preguntar por tipo de despliegue
+- No verificar si las tablas BBDD están creadas
+- Continuar sin confirmación en checkpoints
+- Ignorar especificaciones de design system del usuario
