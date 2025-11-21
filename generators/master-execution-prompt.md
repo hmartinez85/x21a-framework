@@ -26,9 +26,10 @@ COLOR_SECUNDARIO: [Ej: #64748b - Gris corporativo]
 
 1. **TECNOLOGÍA FRONTEND:**
    - **OPCIÓN 1: REACT + MATERIAL-UI** - Moderno, componentes Google Material Design
-   - **OPCIÓN 2: ANGULAR + ANGULAR MATERIAL** - Enterprise, TypeScript, Material Design
-   - **OPCIÓN 3: REACT + ATLASSIAN DESIGN SYSTEM** - Empresarial, componentes Atlassian
-   - **OPCIÓN 4: THYMELEAF + BOOTSTRAP** - Tradicional, server-side rendering
+   - **OPCIÓN 2: REACT + ATLASSIAN DESIGN SYSTEM** - Empresarial, componentes Atlassian
+   - **OPCIÓN 3: REACT + ANT DESIGN** - Enterprise UI, componentes Ant Design
+   - **OPCIÓN 4: ANGULAR + ANGULAR MATERIAL** - Enterprise, TypeScript, Material Design
+   - **OPCIÓN 5: THYMELEAF + BOOTSTRAP** - Tradicional, server-side rendering
    
    **❓ ¿Qué tecnología frontend prefieres?**
 
@@ -115,8 +116,10 @@ COLOR_SECUNDARIO: [Ej: #64748b - Gris corporativo]
 
 **PASO 4: FRONTEND CONECTADO A BBDD REAL**
 1. **SEGÚN TECNOLOGÍA SELECCIONADA:**
-   - **Si REACT**: Componentes React + API REST + **FallbackUI OBLIGATORIO**
-   - **Si ANGULAR**: Componentes Angular + HTTP Client
+   - **Si REACT + MATERIAL-UI**: Componentes @mui/material + API REST + **FallbackUI OBLIGATORIO**
+   - **Si REACT + ATLASSIAN**: Componentes @atlaskit/* + API REST + **FallbackUI OBLIGATORIO**
+   - **Si REACT + ANT DESIGN**: Componentes antd + API REST + **FallbackUI OBLIGATORIO**
+   - **Si ANGULAR + ANGULAR MATERIAL**: Componentes @angular/material + HTTP Client + Services
    - **Si THYMELEAF**: Vistas Thymeleaf + Controller MVC
 
 2. **🔴 REGLA CRÍTICA**: Frontend debe consumir datos REALES de la API
@@ -153,6 +156,45 @@ COLOR_SECUNDARIO: [Ej: #64748b - Gris corporativo]
    - Genera `CONFIGURACION-BBDD-REAL.md` con setup de base de datos
 
 4. **CONFIRMACIÓN FINAL**: ¿Aplicación 100% funcional con BBDD real?
+
+### 🔍 VALIDACIONES ESPECÍFICAS POR DESIGN SYSTEM
+
+**CHECKPOINT DESIGN SYSTEM - VALIDAR ANTES DE CONTINUAR:**
+
+**SI MATERIAL-UI:**
+- [ ] @mui/material instalado correctamente
+- [ ] ThemeProvider configurado en App.js
+- [ ] Componentes MUI importados (Button, TextField, Table, etc.)
+- [ ] Iconos @mui/icons-material funcionando
+- [ ] Responsive breakpoints configurados
+
+**SI ATLASSIAN DESIGN SYSTEM:**
+- [ ] @atlaskit/* packages instalados
+- [ ] Tokens de diseño aplicados
+- [ ] Page layout con Atlassian components
+- [ ] Formularios con @atlaskit/form
+- [ ] Tablas con @atlaskit/dynamic-table
+
+**SI ANT DESIGN:**
+- [ ] antd instalado correctamente
+- [ ] ConfigProvider configurado
+- [ ] Componentes Ant (Button, Form, Table) funcionando
+- [ ] Iconos @ant-design/icons importados
+- [ ] Layout y Grid system implementado
+
+**SI ANGULAR + ANGULAR MATERIAL:**
+- [ ] @angular/material instalado correctamente
+- [ ] Angular Material theme configurado
+- [ ] Componentes Material (MatButton, MatTable, MatForm) funcionando
+- [ ] Angular animations habilitadas
+- [ ] Routing de Angular configurado
+- [ ] Services para HTTP Client implementados
+
+**SI THYMELEAF:**
+- [ ] Bootstrap 5 CSS incluido
+- [ ] Templates .html válidos
+- [ ] Formularios con th:object
+- [ ] Listados con th:each
 
 ### ⚙️ CONFIGURACIÓN TÉCNICA FIJA
 
@@ -200,11 +242,17 @@ spring.jpa.show-sql=true
 
 ### 🔧 GESTIÓN DE DEPENDENCIAS CRÍTICA
 
-**PARA REACT + ATLASSIAN DESIGN SYSTEM:**
+**PARA TODOS LOS DESIGN SYSTEMS REACT:**
 - **REGLA CRÍTICA**: SIEMPRE usar `--legacy-peer-deps`
 - **CREAR FallbackUI.js** como backup obligatorio
 - **USAR React.createElement()** si JSX falla
 - **IMPLEMENTAR Error Boundaries** en React
+
+**DEPENDENCIAS ESPECÍFICAS POR DESIGN SYSTEM:**
+- **MATERIAL-UI**: @mui/material @mui/icons-material @emotion/react @emotion/styled
+- **ATLASSIAN**: @atlaskit/button @atlaskit/form @atlaskit/table @atlaskit/page-layout
+- **ANT DESIGN**: antd @ant-design/icons
+- **ANGULAR MATERIAL**: @angular/material @angular/cdk @angular/animations
 
 ### 📁 ESTRUCTURA DE ARCHIVOS ESPERADA
 
@@ -254,6 +302,7 @@ spring.jpa.show-sql=true
 - **CHECKPOINT PREVIO**: ¿Todas las preguntas técnicas respondidas?
 - **CHECKPOINT SISTEMA**: ¿Entorno compatible Y puerto libre?
 - **CHECKPOINT 0**: ¿Design System completo y personalizado?
+- **CHECKPOINT DESIGN SYSTEM**: ¿Componentes del design system seleccionado funcionando correctamente?
 - **CHECKPOINT 0.5**: ¿BBDD real conectada Y credenciales válidas?
 - **CHECKPOINT 1**: ¿Prototipo v2 mejora v1 Y es responsive?
 - **CHECKPOINT 2**: ¿Prototipo final enterprise Y animaciones fluidas?
@@ -341,13 +390,18 @@ Al completar la ejecución debes haber generado:
 
 **❌ ERRORES COMUNES A EVITAR (BASADOS EN EXPERIENCIA REAL):**
 - Cambiar React por Thymeleaf sin consultar
+- Confundir design systems (Material-UI vs Atlassian vs Ant vs Chakra)
 - Generar código con métodos que retornan null
 - No preguntar por puerto específico del usuario
 - No verificar si las tablas BBDD están creadas
 - Continuar sin confirmación en checkpoints
 - No crear FallbackUI para React
 - Usar npm install sin --legacy-peer-deps
+- Mezclar componentes de diferentes design systems
+- No importar correctamente las dependencias del design system
 - Build en modo production (usar development para debug)
 - No validar que la aplicación arranca sin errores
+- No configurar correctamente el Provider del design system (ChakraProvider, ConfigProvider, etc.)
+- Usar componentes deprecated de versiones antiguas
 
 **FRAMEWORK X21A V3.0 - OPTIMIZADO PARA ÉXITO GARANTIZADO** 🚀
